@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achilles Tendon Clinical Assessment Tool</title>
+<style>
+/* ── Reset & Base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#2563eb;--blue-light:#dbeafe;--blue-dark:#1e40af;
+  --red:#dc2626;--red-light:#fee2e2;--red-dark:#991b1b;
+  --green:#16a34a;--green-light:#dcfce7;--green-dark:#166534;
+  --amber:#d97706;--amber-light:#fef3c7;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+  --gray-500:#6b7280;--gray-700:#374151;--gray-900:#111827;
+  --radius:12px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-50);color:var(--gray-900);line-height:1.6;min-height:100vh}
+a{color:var(--blue)}
+
+/* ── Layout ── */
+.container{max-width:820px;margin:0 auto;padding:16px}
+header{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;padding:28px 24px;text-align:center;border-radius:0 0 var(--radius) var(--radius)}
+header h1{font-size:1.55rem;font-weight:700;margin-bottom:4px}
+header p{opacity:.85;font-size:.92rem}
+
+/* ── Cards ── */
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin:20px 0;border:1px solid var(--gray-200);animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card h2{font-size:1.18rem;margin-bottom:12px}
+.card h3{font-size:1.05rem;margin-bottom:8px}
+.card p,.card li{font-size:.93rem;color:var(--gray-700)}
+.card ul{padding-left:20px;margin:8px 0}
+.card ul li{margin:4px 0}
+
+/* colour-coded card variants */
+.card-red{border-left:5px solid var(--red)}
+.card-red h2,.card-red h3{color:var(--red-dark)}
+.card-green{border-left:5px solid var(--green)}
+.card-green h2,.card-green h3{color:var(--green-dark)}
+.card-blue{border-left:5px solid var(--blue)}
+.card-blue h2,.card-blue h3{color:var(--blue-dark)}
+.card-amber{border-left:5px solid var(--amber)}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border:none;border-radius:8px;font-size:.93rem;font-weight:600;cursor:pointer;transition:background .2s,transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:var(--red-dark)}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{background:var(--green-dark)}
+.btn-outline{background:#fff;color:var(--gray-700);border:1.5px solid var(--gray-300)}
+.btn-outline:hover{background:var(--gray-100)}
+.btn-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+
+/* ── Yes/No decision buttons ── */
+.decision-btns{display:flex;gap:12px;margin-top:16px}
+.decision-btns .btn{flex:1;justify-content:center;padding:12px;font-size:1rem}
+
+/* ── Red-flag item ── */
+.rf-item{background:var(--red-light);border-radius:8px;padding:14px 16px;margin:10px 0}
+.rf-item strong{color:var(--red-dark);display:block;margin-bottom:2px}
+.rf-item .rf-explain{font-size:.86rem;color:var(--gray-700);margin-top:4px;font-style:italic}
+
+/* ── Checklist ── */
+.check-list label{display:flex;align-items:flex-start;gap:8px;padding:8px 0;cursor:pointer;font-size:.93rem}
+.check-list input[type=checkbox]{margin-top:3px;width:18px;height:18px;accent-color:var(--red)}
+
+/* ── Summary box ── */
+.summary-box{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:8px;padding:16px;white-space:pre-wrap;font-family:'Courier New',monospace;font-size:.88rem;max-height:420px;overflow-y:auto;margin:12px 0}
+
+/* ── Form elements ── */
+select,input[type=text]{padding:9px 12px;border:1.5px solid var(--gray-300);border-radius:8px;font-size:.93rem;background:#fff;width:100%;max-width:320px}
+.form-group{margin:12px 0}
+.form-group label{display:block;font-weight:600;margin-bottom:4px;font-size:.9rem}
+
+/* ── Progress indicator ── */
+.progress-bar{display:flex;gap:6px;justify-content:center;margin:18px 0 8px}
+.progress-dot{width:12px;height:12px;border-radius:50%;background:var(--gray-300);transition:background .3s}
+.progress-dot.active{background:var(--blue)}
+.progress-dot.done{background:var(--green)}
+
+/* ── Alert banner ── */
+.alert{padding:14px 18px;border-radius:8px;font-weight:600;margin:14px 0;font-size:.95rem}
+.alert-red{background:var(--red-light);color:var(--red-dark);border:1.5px solid var(--red)}
+.alert-green{background:var(--green-light);color:var(--green-dark);border:1.5px solid var(--green)}
+.alert-blue{background:var(--blue-light);color:var(--blue-dark);border:1.5px solid var(--blue)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gray-900);color:#fff;padding:10px 22px;border-radius:8px;font-size:.9rem;z-index:999;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+
+/* ── Differential table ── */
+.diff-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem}
+.diff-table th,.diff-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--gray-200)}
+.diff-table th{background:var(--gray-100);font-weight:600}
+.diff-table tr:hover td{background:var(--blue-light)}
+
+/* ── Footer ── */
+footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500);border-top:1px solid var(--gray-200);margin-top:30px}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .container{padding:10px}
+  header{padding:20px 14px}
+  header h1{font-size:1.25rem}
+  .card{padding:16px}
+  .decision-btns{flex-direction:column}
+  .btn-group{flex-direction:column}
+  select,input[type=text]{max-width:100%}
+}
+
+/* ── Print ── */
+@media print{
+  header,.btn,.decision-btns,.progress-bar,.btn-group,footer,.toast{display:none!important}
+  .card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+}
+
+/* ── Hidden utility ── */
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Achilles Tendon Clinical Assessment Tool</h1>
+  <p>Interactive decision-support flowchart for clinicians</p>
+</header>
+
+<div class="container">
+
+  <!-- Progress dots -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 0 – Welcome / Start -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-start" class="card card-blue step">
+    <h2>Begin Assessment</h2>
+    <p>This tool will guide you through a structured assessment of a patient presenting with Achilles tendon symptoms. You will be taken through:</p>
+    <ul>
+      <li>History &amp; onset</li>
+      <li>Red flag screening (with clinical education)</li>
+      <li>Functional assessment</li>
+      <li>Diagnosis pathway</li>
+      <li>Evidence-based management plan</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="goTo('step-demographics')">Start Assessment</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 0b – Audit Demographics -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-demographics" class="card card-blue step hidden">
+    <h2>Audit Data Collection</h2>
+    <div class="alert alert-blue">This tool collects minimal, non-identifiable audit data in line with UK GDPR data minimisation principles.</div>
+    <p>Please complete the following demographic information before proceeding with the clinical assessment.</p>
+
+    <div class="form-group">
+      <label for="demoAge">Age Band</label>
+      <select id="demoAge">
+        <option value="">-- Select --</option>
+        <option>18-29</option>
+        <option>30-39</option>
+        <option>40-49</option>
+        <option>50-59</option>
+        <option>60+</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="demoGender">Gender</label>
+      <select id="demoGender">
+        <option value="">-- Select --</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+        <option>Prefer not to say</option>
+      </select>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="saveDemographics()">Continue to Assessment</button>
+      <button class="btn btn-outline" onclick="goTo('step-start')">Back</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 1 – Onset -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-onset" class="card card-blue step hidden">
+    <h2>Step 1: Symptom Onset</h2>
+    <p>How did the patient's symptoms begin?</p>
+    <div class="decision-btns">
+      <button class="btn btn-danger" onclick="setOnset('sudden')">Sudden Onset</button>
+      <button class="btn btn-success" onclick="setOnset('gradual')">Gradual Onset</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 2 – Red Flag Screening -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-redflags" class="card card-red step hidden">
+    <h2>Step 2: Red Flag Screening</h2>
+    <p>Assess the patient for the following red flags. Tick any that are present. Each item includes a brief clinical explanation.</p>
+
+    <div class="check-list" id="rfChecklist">
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="pop"> <strong>Sudden "pop" or snapping sensation</strong></label>
+        <div class="rf-explain">Suggests possible acute Achilles tendon rupture. Often reported during pushing off or sudden acceleration.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="plantarflex"> <strong>Inability to plantarflex or push off</strong></label>
+        <div class="rf-explain">Indicates functional loss of the Achilles tendon. The patient cannot rise onto tiptoes on the affected side.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="thompson"> <strong>Positive Thompson (Simmonds') test</strong></label>
+        <div class="rf-explain">No plantarflexion when the calf is squeezed with the patient prone = highly suggestive of complete rupture.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="gap"> <strong>Palpable tendon gap</strong></label>
+        <div class="rf-explain">A palpable defect in the tendon substance indicates structural discontinuity consistent with rupture.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="swelling"> <strong>Severe swelling or bruising</strong></label>
+        <div class="rf-explain">Acute ecchymosis or significant oedema around the posterior ankle suggests acute tear or significant trauma.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="weightbear"> <strong>Inability to weight bear</strong></label>
+        <div class="rf-explain">Inability to take weight through the affected limb indicates a significant structural injury requiring urgent assessment.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="systemic"> <strong>Systemic symptoms (fever, redness, heat)</strong></label>
+        <div class="rf-explain">May indicate infection, inflammatory arthropathy, or other systemic pathology requiring urgent medical review.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="fluoroquinolone"> <strong>History of fluoroquinolone antibiotic use</strong></label>
+        <div class="rf-explain">Fluoroquinolones (e.g. ciprofloxacin, levofloxacin) are associated with increased risk of Achilles tendon rupture, particularly in older adults. NICE advises vigilance in patients on or recently completing fluoroquinolone therapy.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="corticosteroid"> <strong>History of corticosteroid use (oral or local injection)</strong></label>
+        <div class="rf-explain">Systemic or locally injected corticosteroids weaken tendon structure and increase rupture risk. Inquire about recent steroid injections near the Achilles or prolonged oral corticosteroid therapy.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="nightpain"> <strong>Night pain or rest pain unrelated to loading</strong></label>
+        <div class="rf-explain">Pain at rest or that wakes the patient at night, unrelated to tendon loading, may suggest serious underlying pathology such as malignancy, infection, or inflammatory condition requiring further investigation.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="inflammatory"> <strong>History of inflammatory or rheumatological condition</strong></label>
+        <div class="rf-explain">Conditions such as rheumatoid arthritis, spondyloarthropathy, or gout may predispose to tendon pathology and warrant specialist rheumatological input alongside MSK management.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="bilateral"> <strong>Bilateral Achilles tendon symptoms</strong></label>
+        <div class="rf-explain">Bilateral presentation may indicate a systemic cause such as inflammatory arthropathy, medication side-effect (e.g. statins, fluoroquinolones), or metabolic condition. Further investigation is warranted.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="weightloss"> <strong>Unexplained weight loss</strong></label>
+        <div class="rf-explain">Unintentional weight loss alongside musculoskeletal symptoms is a red flag for possible malignancy or serious systemic disease and warrants urgent further investigation.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="dvt"> <strong>Symptoms suggestive of DVT (unilateral calf swelling, warmth, tenderness)</strong></label>
+        <div class="rf-explain">Calf swelling and pain may mimic Achilles pathology but could indicate deep vein thrombosis. Consider Wells score assessment and urgent investigation if DVT is suspected.</div>
+      </div>
+
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="trauma"> <strong>Significant trauma or high-energy mechanism of injury</strong></label>
+        <div class="rf-explain">A high-energy mechanism (e.g. fall from height, direct blow, road traffic accident) raises suspicion for fracture, complete rupture, or other significant structural injury requiring urgent imaging and specialist assessment.</div>
+      </div>
+
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="evaluateRedFlags()">Continue</button>
+      <button class="btn btn-outline" onclick="goTo('step-onset')">Back</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 2b – Urgent Referral -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-urgent" class="card card-red step hidden">
+    <h2>URGENT REFERRAL REQUIRED</h2>
+    <div class="alert alert-red">One or more red flags have been identified. This patient requires urgent specialist assessment.</div>
+    <h3>Immediate Actions:</h3>
+    <ul>
+      <li>Immobilise the ankle in <strong>plantarflexion</strong> (equinus position)</li>
+      <li>Arrange <strong>same-day referral</strong> to A&amp;E / Orthopaedics</li>
+      <li>Advise <strong>non-weight-bearing</strong> with crutches</li>
+      <li>Document red flags clearly in clinical notes</li>
+    </ul>
+    <h3>Red Flags Identified:</h3>
+    <ul id="urgentFlagList"></ul>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="goTo('step-summary')">Generate Clinical Summary</button>
+      <button class="btn btn-outline" onclick="goTo('step-audit')">Complete Audit Data</button>
+      <button class="btn btn-danger" onclick="restart()">End Assessment</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 3 – Functional Assessment -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-functional" class="card card-blue step hidden">
+    <h2>Step 3: Functional Assessment</h2>
+    <p>Does the patient have <strong>localised Achilles tendon pain</strong> that is aggravated by loading activities (e.g. walking, running, stairs)?</p>
+    <div class="decision-btns">
+      <button class="btn btn-primary" onclick="setLoadPain(true)">Yes</button>
+      <button class="btn btn-outline" onclick="setLoadPain(false)">No</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 3b – Symptom Duration -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-duration" class="card card-blue step hidden">
+    <h2>Step 3b: Symptom Duration</h2>
+    <p>How long has the patient experienced symptoms?</p>
+    <div class="decision-btns">
+      <button class="btn btn-outline" onclick="setDuration('acute')">Less than 3 months</button>
+      <button class="btn btn-outline" onclick="setDuration('chronic')">3 months or longer</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 4 – Differential Diagnosis -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-differential" class="card card-amber step hidden">
+    <h2>Step 4: Differential Diagnosis</h2>
+    <p>The presentation is <strong>not typical</strong> of Achilles tendinopathy. Consider the following differential diagnoses:</p>
+    <table class="diff-table">
+      <thead><tr><th>Condition</th><th>Key Feature</th></tr></thead>
+      <tbody>
+        <tr><td>Retrocalcaneal bursitis</td><td>Pain anterior to the Achilles tendon insertion</td></tr>
+        <tr><td>Sural nerve irritation</td><td>Burning / tingling along the lateral ankle</td></tr>
+        <tr><td>Partial Achilles tear</td><td>Weakness but not complete loss of function</td></tr>
+        <tr><td>Posterior ankle impingement</td><td>Pain at end-range plantarflexion</td></tr>
+        <tr><td>Lumbar referral</td><td>Referred pain to the posterior leg (L5/S1 distribution)</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:10px">Select the most likely working diagnosis, or choose "Unclear" to record further investigation is needed.</p>
+    <div class="form-group">
+      <select id="diffSelect">
+        <option value="">-- Select --</option>
+        <option value="Retrocalcaneal bursitis">Retrocalcaneal bursitis</option>
+        <option value="Sural nerve irritation">Sural nerve irritation</option>
+        <option value="Partial Achilles tear">Partial Achilles tear</option>
+        <option value="Posterior ankle impingement">Posterior ankle impingement</option>
+        <option value="Lumbar referral">Lumbar referral</option>
+        <option value="Unclear - further investigation needed">Unclear - further investigation needed</option>
+      </select>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="setDifferential()">Continue</button>
+      <button class="btn btn-outline" onclick="goTo('step-functional')">Back</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 5 – Tendinopathy Management -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-tendinopathy" class="card card-green step hidden">
+    <h2>Achilles Tendinopathy &mdash; Evidence-Based Management</h2>
+
+    <div class="alert alert-green">Working diagnosis: Achilles Tendinopathy</div>
+
+    <h3>Phase 1: Pain Control (Weeks 0&ndash;4)</h3>
+    <ul>
+      <li><strong>Isometric calf holds:</strong> 30&ndash;45 seconds, 4&ndash;5 reps, 2&ndash;3 times/day</li>
+      <li>Load modification &mdash; reduce provocative activities but <strong>avoid complete rest</strong></li>
+    </ul>
+
+    <h3>Phase 2: Strength (Weeks 4&ndash;12)</h3>
+    <ul>
+      <li>Heel raises: progress from double-leg &rarr; single-leg</li>
+      <li>3&ndash;4 sets of 8&ndash;12 reps</li>
+      <li>Slow tempo: 3 seconds up, 3 seconds down</li>
+    </ul>
+
+    <h3>Phase 3: Return to Sport (Week 12+)</h3>
+    <ul>
+      <li>Plyometrics: hopping, skipping, bounding</li>
+      <li>Sport-specific drills with graduated loading</li>
+    </ul>
+
+    <h3>Key Advice</h3>
+    <ul>
+      <li>Avoid complete rest &mdash; tendons respond to progressive load</li>
+      <li>Avoid corticosteroid injections into the tendon</li>
+      <li>Imaging only if symptoms persist &gt;3 months or diagnosis unclear</li>
+    </ul>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="goTo('step-summary')">Generate Clinical Summary</button>
+      <button class="btn btn-outline" onclick="goTo('step-audit')">Complete Audit Data</button>
+      <button class="btn btn-danger" onclick="restart()">End Assessment</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 5b – Rupture Management -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-rupture" class="card card-red step hidden">
+    <h2>Achilles Tendon Rupture &mdash; Management</h2>
+    <div class="alert alert-red">Working diagnosis: Achilles Tendon Rupture</div>
+    <h3>Immediate Management:</h3>
+    <ul>
+      <li><strong>Urgent referral</strong> to A&amp;E / Orthopaedics (same day)</li>
+      <li>Immobilise ankle in <strong>plantarflexion</strong></li>
+      <li>Non-weight-bearing with crutches</li>
+      <li><strong>No exercises</strong> &mdash; await specialist review</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="goTo('step-summary')">Generate Clinical Summary</button>
+      <button class="btn btn-outline" onclick="goTo('step-audit')">Complete Audit Data</button>
+      <button class="btn btn-danger" onclick="restart()">End Assessment</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 6 – Clinical Summary -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-summary" class="card card-blue step hidden">
+    <h2>Clinical Summary</h2>
+    <p>Auto-generated structured clinical notes based on assessment findings.</p>
+    <div class="summary-box" id="summaryBox"></div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="copySummary()">Copy to Clipboard</button>
+      <button class="btn btn-outline" onclick="downloadSummary()">Download as .txt</button>
+      <button class="btn btn-outline" onclick="goTo('step-audit')">Complete Audit Data</button>
+      <button class="btn btn-danger" onclick="restart()">End Assessment</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 7 – GDPR Audit -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-audit" class="card card-blue step hidden">
+    <h2>Audit Data Collection</h2>
+    <div class="alert alert-blue">This tool collects minimal, non-identifiable audit data in line with UK GDPR data minimisation principles.</div>
+
+    <div class="form-group">
+      <label for="auditAge">Age Band</label>
+      <select id="auditAge">
+        <option value="">-- Select --</option>
+        <option>18-29</option>
+        <option>30-39</option>
+        <option>40-49</option>
+        <option>50-59</option>
+        <option>60+</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="auditGender">Gender</label>
+      <select id="auditGender">
+        <option value="">-- Select --</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+        <option>Prefer not to say</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Tool Outcome Classification</label>
+      <input type="text" id="auditOutcome" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>Date of Completion</label>
+      <input type="text" id="auditDate" readonly>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-success" onclick="saveAudit()">Save Audit Entry</button>
+      <button class="btn btn-outline" onclick="downloadCSV()">Download CSV</button>
+      <button class="btn btn-outline" onclick="goTo('step-summary')">View Clinical Summary</button>
+      <button class="btn btn-danger" onclick="restart()">End Assessment</button>
+    </div>
+
+    <div id="auditTable" class="hidden" style="margin-top:20px">
+      <h3>Saved Audit Entries</h3>
+      <div style="overflow-x:auto">
+        <table class="diff-table" id="auditDataTable">
+          <thead><tr><th>#</th><th>Date</th><th>Age Band</th><th>Gender</th><th>Outcome</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+</div><!-- /container -->
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<footer>
+  <p>Disclaimer: This tool is designed as a clinical decision support aid and does not replace professional judgement or comprehensive patient assessment. All clinical decisions remain the responsibility of the treating healthcare professional. Guidance is informed by NICE MSK and tendon management principles; however, clinicians must adhere to local organisational policies, governance frameworks, and escalation pathways where indicated.</p>
+  <p style="margin-top:6px">&copy; Achilles Tendon Assessment Tool</p>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════ */
+const state = {
+  onset: '',          // 'sudden' | 'gradual'
+  redFlags: [],       // list of checked red-flag labels
+  hasRedFlags: false,
+  loadPain: null,     // boolean
+  duration: '',       // 'acute' | 'chronic'
+  diagnosis: '',      // final working diagnosis string
+  outcomeClass: '',   // audit classification
+  differential: '',   // if differential selected
+  demoAge: '',        // demographic age band
+  demoGender: ''      // demographic gender
+};
+
+/* Step ordering for progress dots */
+const stepOrder = [
+  'step-start','step-demographics','step-onset','step-redflags','step-functional',
+  'step-duration','step-tendinopathy','step-summary','step-audit'
+];
+
+/* Red-flag labels for display */
+const rfLabels = {
+  pop: 'Sudden "pop" or snapping sensation',
+  plantarflex: 'Inability to plantarflex or push off',
+  thompson: 'Positive Thompson test',
+  gap: 'Palpable tendon gap',
+  swelling: 'Severe swelling or bruising',
+  weightbear: 'Inability to weight bear',
+  systemic: 'Systemic symptoms (fever, redness, heat)',
+  fluoroquinolone: 'History of fluoroquinolone antibiotic use',
+  corticosteroid: 'History of corticosteroid use (oral or local injection)',
+  nightpain: 'Night pain or rest pain unrelated to loading',
+  inflammatory: 'History of inflammatory or rheumatological condition',
+  bilateral: 'Bilateral Achilles tendon symptoms',
+  weightloss: 'Unexplained weight loss',
+  dvt: 'Symptoms suggestive of DVT',
+  trauma: 'Significant trauma or high-energy mechanism of injury'
+};
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════════ */
+let currentStep = 'step-start';
+
+function goTo(id) {
+  document.getElementById(currentStep).classList.add('hidden');
+  document.getElementById(id).classList.remove('hidden');
+  currentStep = id;
+  updateProgress();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+
+  // Auto-populate summary if navigating to it
+  if (id === 'step-summary') buildSummary();
+  // Auto-populate audit fields
+  if (id === 'step-audit') prepareAudit();
+}
+
+function updateProgress() {
+  const bar = document.getElementById('progressBar');
+  const idx = stepOrder.indexOf(currentStep);
+  bar.innerHTML = '';
+  // Simplified: show 7 dots for main flow
+  const mainSteps = ['step-start','step-demographics','step-onset','step-redflags','step-functional','step-tendinopathy','step-summary','step-audit'];
+  mainSteps.forEach((s, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot';
+    const ci = mainSteps.indexOf(currentStep);
+    if (i < ci) dot.classList.add('done');
+    else if (i === ci) dot.classList.add('active');
+    bar.appendChild(dot);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   STEP HANDLERS
+   ══════════════════════════════════════════════ */
+function saveDemographics() {
+  const age = document.getElementById('demoAge').value;
+  const gender = document.getElementById('demoGender').value;
+  if (!age || !gender) { showToast('Please complete all demographic fields'); return; }
+  state.demoAge = age;
+  state.demoGender = gender;
+  goTo('step-onset');
+}
+
+function setOnset(type) {
+  state.onset = type;
+  goTo('step-redflags');
+}
+
+function evaluateRedFlags() {
+  const checks = document.querySelectorAll('#rfChecklist input[type=checkbox]:checked');
+  state.redFlags = [];
+  checks.forEach(c => {
+    state.redFlags.push(rfLabels[c.dataset.rf] || c.dataset.rf);
+  });
+  state.hasRedFlags = state.redFlags.length > 0;
+
+  if (state.hasRedFlags) {
+    // Populate urgent page
+    const ul = document.getElementById('urgentFlagList');
+    ul.innerHTML = state.redFlags.map(f => '<li>' + f + '</li>').join('');
+
+    // Determine if rupture-specific flags dominate
+    const ruptureFlags = ['pop','plantarflex','thompson','gap'];
+    const systemicFlags = ['systemic','inflammatory','bilateral','weightloss','dvt','nightpain'];
+    const checkedKeys = Array.from(checks).map(c => c.dataset.rf);
+    const hasRuptureSign = ruptureFlags.some(k => checkedKeys.includes(k));
+    const hasSystemicSign = systemicFlags.some(k => checkedKeys.includes(k));
+
+    if (hasSystemicSign && !hasRuptureSign) {
+      state.diagnosis = 'Possible infection / systemic pathology';
+      state.outcomeClass = 'Red Flag Referral';
+    } else {
+      state.diagnosis = 'Suspected Achilles tendon rupture';
+      state.outcomeClass = 'Rupture';
+    }
+    goTo('step-urgent');
+  } else {
+    goTo('step-functional');
+  }
+}
+
+function setLoadPain(val) {
+  state.loadPain = val;
+  if (val) {
+    goTo('step-duration');
+  } else {
+    // Not typical tendinopathy → differential
+    state.outcomeClass = 'Differential Diagnosis';
+    goTo('step-differential');
+  }
+}
+
+function setDuration(dur) {
+  state.duration = dur;
+  state.diagnosis = 'Achilles tendinopathy';
+  state.outcomeClass = 'Tendinopathy';
+  goTo('step-tendinopathy');
+}
+
+function setDifferential() {
+  const sel = document.getElementById('diffSelect').value;
+  if (!sel) { showToast('Please select a diagnosis'); return; }
+  state.differential = sel;
+  state.diagnosis = sel;
+  state.outcomeClass = 'Differential Diagnosis';
+  goTo('step-summary');
+}
+
+/* ══════════════════════════════════════════════
+   CLINICAL SUMMARY
+   ══════════════════════════════════════════════ */
+function buildSummary() {
+  const lines = [];
+  lines.push('═══════════════════════════════════════');
+  lines.push('         CLINICAL SUMMARY');
+  lines.push('═══════════════════════════════════════');
+  lines.push('');
+
+  // Subjective
+  lines.push('SUBJECTIVE');
+  lines.push('──────────');
+  lines.push('Onset: ' + (state.onset === 'sudden' ? 'Sudden' : 'Gradual'));
+  const symptoms = [];
+  if (state.onset === 'sudden') symptoms.push('Acute onset Achilles region symptoms');
+  else symptoms.push('Insidious onset Achilles region symptoms');
+  if (state.loadPain === true) symptoms.push('Pain aggravated by loading activities');
+  if (state.loadPain === false) symptoms.push('Pain not typical of load-related tendinopathy');
+  if (state.duration) symptoms.push('Duration: ' + (state.duration === 'acute' ? '<3 months' : '≥3 months'));
+  lines.push('Symptoms: ' + symptoms.join('; '));
+  lines.push('');
+
+  // Objective
+  lines.push('OBJECTIVE');
+  lines.push('──────────');
+  lines.push('Red flags: ' + (state.hasRedFlags ? 'YES' : 'No'));
+  if (state.hasRedFlags) {
+    state.redFlags.forEach(f => lines.push('  - ' + f));
+  }
+  if (state.loadPain !== null) {
+    lines.push('Functional deficit: ' + (state.loadPain ? 'Load-related pain present' : 'No typical load-related pain'));
+  }
+  const findings = [];
+  if (state.hasRedFlags) findings.push('Red flag signs identified');
+  if (state.loadPain) findings.push('Positive for load-related Achilles pain');
+  if (state.differential) findings.push('Differential considered: ' + state.differential);
+  if (findings.length) lines.push('Key findings: ' + findings.join('; '));
+  lines.push('');
+
+  // Assessment
+  lines.push('ASSESSMENT');
+  lines.push('──────────');
+  lines.push('Working diagnosis: ' + (state.diagnosis || 'Not yet determined'));
+  lines.push('');
+
+  // Plan
+  lines.push('PLAN');
+  lines.push('──────────');
+
+  if (state.outcomeClass === 'Rupture' || state.diagnosis === 'Suspected Achilles tendon rupture') {
+    lines.push('Management:');
+    lines.push('  - Urgent same-day referral to A&E / Orthopaedics');
+    lines.push('  - Immobilise ankle in plantarflexion');
+    lines.push('  - Non-weight-bearing with crutches');
+    lines.push('Exercise prescription: None - await specialist review');
+    lines.push('Referral: URGENT - same-day orthopaedic / A&E referral');
+  } else if (state.outcomeClass === 'Red Flag Referral') {
+    lines.push('Management:');
+    lines.push('  - Urgent referral for specialist assessment');
+    lines.push('  - Investigate systemic symptoms');
+    lines.push('Exercise prescription: None pending investigation');
+    lines.push('Referral: URGENT - same-day referral');
+  } else if (state.outcomeClass === 'Tendinopathy') {
+    lines.push('Management:');
+    lines.push('  - Progressive tendon loading programme');
+    lines.push('  - Avoid complete rest');
+    lines.push('  - Avoid corticosteroid injections');
+    if (state.duration === 'chronic') {
+      lines.push('  - Consider imaging (symptoms ≥3 months)');
+    } else {
+      lines.push('  - Imaging only if no improvement after 3 months');
+    }
+    lines.push('Exercise prescription:');
+    lines.push('  Phase 1 (Wk 0-4): Isometric calf holds 30-45s x 4-5 reps, 2-3x/day');
+    lines.push('  Phase 2 (Wk 4-12): Heel raises double→single leg, 3-4 sets x 8-12 reps, 3s tempo');
+    lines.push('  Phase 3 (Wk 12+): Plyometrics - hopping, skipping, sport-specific drills');
+    lines.push('Referral: Not indicated at this stage');
+  } else if (state.outcomeClass === 'Differential Diagnosis') {
+    lines.push('Management:');
+    lines.push('  - Further investigation for: ' + state.diagnosis);
+    lines.push('  - Consider appropriate imaging or specialist referral');
+    lines.push('Exercise prescription: Dependent on confirmed diagnosis');
+    lines.push('Referral: As clinically indicated');
+  }
+
+  lines.push('');
+  lines.push('──────────');
+  lines.push('Generated: ' + new Date().toLocaleString('en-GB'));
+  lines.push('Tool: Achilles Tendon Clinical Assessment Tool');
+
+  const text = lines.join('\n');
+  document.getElementById('summaryBox').textContent = text;
+}
+
+function getSummaryText() {
+  return document.getElementById('summaryBox').textContent;
+}
+
+function copySummary() {
+  navigator.clipboard.writeText(getSummaryText()).then(() => {
+    showToast('Summary copied to clipboard');
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = getSummaryText();
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Summary copied to clipboard');
+  });
+}
+
+function downloadSummary() {
+  const blob = new Blob([getSummaryText()], {type: 'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'achilles_clinical_summary_' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Summary downloaded');
+}
+
+/* ══════════════════════════════════════════════
+   AUDIT / GDPR
+   ══════════════════════════════════════════════ */
+function prepareAudit() {
+  document.getElementById('auditAge').value = state.demoAge || '';
+  document.getElementById('auditGender').value = state.demoGender || '';
+  document.getElementById('auditOutcome').value = state.outcomeClass || 'Not determined';
+  document.getElementById('auditDate').value = new Date().toLocaleDateString('en-GB');
+  renderAuditTable();
+}
+
+function saveAudit() {
+  const age = document.getElementById('auditAge').value;
+  const gender = document.getElementById('auditGender').value;
+  if (!age || !gender) { showToast('Please complete all audit fields'); return; }
+
+  const entry = {
+    date: new Date().toLocaleDateString('en-GB'),
+    ageBand: age,
+    gender: gender,
+    outcome: state.outcomeClass || 'Not determined'
+  };
+
+  const data = JSON.parse(localStorage.getItem('achilles_audit') || '[]');
+  data.push(entry);
+  localStorage.setItem('achilles_audit', JSON.stringify(data));
+  showToast('Audit entry saved');
+  renderAuditTable();
+}
+
+function renderAuditTable() {
+  const data = JSON.parse(localStorage.getItem('achilles_audit') || '[]');
+  const container = document.getElementById('auditTable');
+  const tbody = document.querySelector('#auditDataTable tbody');
+  tbody.innerHTML = '';
+  if (data.length === 0) { container.classList.add('hidden'); return; }
+  container.classList.remove('hidden');
+  data.forEach((e, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + (i + 1) + '</td><td>' + esc(e.date) + '</td><td>' + esc(e.ageBand) + '</td><td>' + esc(e.gender) + '</td><td>' + esc(e.outcome) + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function downloadCSV() {
+  const data = JSON.parse(localStorage.getItem('achilles_audit') || '[]');
+  if (data.length === 0) { showToast('No audit data to export'); return; }
+  let csv = 'Date,Age Band,Gender,Outcome\n';
+  data.forEach(e => {
+    csv += '"' + e.date + '","' + e.ageBand + '","' + e.gender + '","' + e.outcome + '"\n';
+  });
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'achilles_audit_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('CSV downloaded');
+}
+
+/* ══════════════════════════════════════════════
+   UTILITIES
+   ══════════════════════════════════════════════ */
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function restart() {
+  // Reset state
+  state.onset = '';
+  state.redFlags = [];
+  state.hasRedFlags = false;
+  state.loadPain = null;
+  state.duration = '';
+  state.diagnosis = '';
+  state.outcomeClass = '';
+  state.differential = '';
+  state.demoAge = '';
+  state.demoGender = '';
+
+  // Uncheck all checkboxes
+  document.querySelectorAll('#rfChecklist input[type=checkbox]').forEach(c => c.checked = false);
+
+  // Reset dropdowns
+  document.getElementById('diffSelect').value = '';
+  document.getElementById('auditAge').value = '';
+  document.getElementById('auditGender').value = '';
+  document.getElementById('demoAge').value = '';
+  document.getElementById('demoGender').value = '';
+
+  goTo('step-start');
+}
+
+/* Init progress */
+updateProgress();
+</script>
+
+</body>
+</html>
