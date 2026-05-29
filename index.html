@@ -205,6 +205,7 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
 
   <!-- ═══════════════════════════════════════════ -->
   <!-- STEP 2 – Red Flag Screening -->
+  <!-- FIX: Added missing closing </div> for #rfChecklist and for the card itself -->
   <!-- ═══════════════════════════════════════════ -->
   <div id="step-redflags" class="card card-red step hidden">
     <h2>Step 2: Red Flag Screening</h2>
@@ -217,12 +218,10 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
         <div class="rf-explain">Suggests possible acute Achilles tendon rupture. Often reported during pushing off or sudden acceleration.</div>
       </div>
 
-     <div class="rf-item">
-  <label><input type="checkbox" data-rf="plantarflex"> <strong>Marked loss of plantarflexion strength or inability to push off (not explained by pain alone)</strong></label>
-  <div class="rf-explain">
-    Consider positive only where there is significant functional loss suggestive of tendon disruption. Pain during plantarflexion alone is NOT a red flag. Compare function with the unaffected side and assess ability to generate plantarflexion movement and perform a heel raise.
-  </div>
-</div>
+      <div class="rf-item">
+        <label><input type="checkbox" data-rf="plantarflex"> <strong>Marked loss of plantarflexion strength or inability to push off (not explained by pain alone)</strong></label>
+        <div class="rf-explain">Pain during plantarflexion alone is not a red flag. Compare function with the unaffected side and assess ability to generate plantarflexion movement and perform a heel raise.</div>
+      </div>
 
       <div class="rf-item">
         <label><input type="checkbox" data-rf="thompson"> <strong>Positive Thompson (Simmonds') test</strong></label>
@@ -284,12 +283,13 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
         <div class="rf-explain">Calf swelling and pain may mimic Achilles pathology but could indicate deep vein thrombosis. Consider Wells score assessment and urgent investigation if DVT is suspected.</div>
       </div>
 
+    </div><!-- /rfChecklist — FIX: this closing tag was missing in the original -->
 
     <div class="btn-group">
       <button class="btn btn-primary" onclick="evaluateRedFlags()">Continue</button>
       <button class="btn btn-outline" onclick="goTo('step-onset')">Back</button>
     </div>
-  </div>
+  </div><!-- /step-redflags — FIX: this closing tag was missing in the original -->
 
   <!-- ═══════════════════════════════════════════ -->
   <!-- STEP 2b – Urgent Referral -->
@@ -346,23 +346,39 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
     <table class="diff-table">
       <thead><tr><th>Condition</th><th>Key Feature</th></tr></thead>
       <tbody>
-        <tr><td>Retrocalcaneal bursitis</td><td>Pain anterior to the Achilles tendon insertion</td></tr>
         <tr>
-  <td>Sural nerve irritation</td>
-  <td>
-    Burning or tingling along the lateral ankle. Consider neural mobility exercises,
-    load modification, footwear review and symptom monitoring before imaging or specialist referral.
-  </td>
-</tr>
-        <tr><td>Partial Achilles tear</td><td>Weakness but not complete loss of function</td></tr>
-        <tr><td>Posterior ankle impingement</td><td>Pain at end-range plantarflexion</td></tr>
-        <tr><td>Lumbar referral</td><td>Referred pain to the posterior leg (L5/S1 distribution)</td></tr>
-        <tr><td>Plantaris pathology</td><td>Medial Achilles pain, often in runners, may mimic Achilles tendinopathy</td></tr>
-        <tr><td>High-energy mechanism injury</td><td>Requires further clinical assessment to exclude fracture or significant structural injury</td></tr>
+          <td>Retrocalcaneal bursitis</td>
+          <td>Pain anterior to the Achilles tendon insertion</td>
+        </tr>
+        <tr>
+          <td>Sural nerve irritation</td>
+          <td>Burning or tingling along the lateral ankle. Consider neural mobility exercises, load modification, footwear review and symptom monitoring before imaging or specialist referral.</td>
+        </tr>
+        <tr>
+          <td>Partial Achilles tear</td>
+          <td>Weakness but not complete loss of function</td>
+        </tr>
+        <tr>
+          <td>Posterior ankle impingement</td>
+          <td>Pain at end-range plantarflexion</td>
+        </tr>
+        <tr>
+          <td>Lumbar referral</td>
+          <td>Referred pain to the posterior leg (L5/S1 distribution)</td>
+        </tr>
+        <tr>
+          <td>Plantaris pathology</td>
+          <td>Medial Achilles pain, often in runners, may mimic Achilles tendinopathy</td>
+        </tr>
+        <tr>
+          <td>High-energy mechanism injury</td>
+          <td>Requires further clinical assessment to exclude fracture or significant structural injury</td>
+        </tr>
       </tbody>
     </table>
-    <p style="margin-top:10px">Select the most likely working diagnosis, or choose "Unclear" to record further investigation is needed.</p>
+    <p style="margin-top:10px">Select the most likely working diagnosis, or choose "Unclear" to record that further investigation is needed.</p>
     <div class="form-group">
+      <!-- FIX: Added Plantaris pathology and High-energy mechanism injury options that were in table but missing from dropdown -->
       <select id="diffSelect">
         <option value="">-- Select --</option>
         <option value="Retrocalcaneal bursitis">Retrocalcaneal bursitis</option>
@@ -370,12 +386,47 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
         <option value="Partial Achilles tear">Partial Achilles tear</option>
         <option value="Posterior ankle impingement">Posterior ankle impingement</option>
         <option value="Lumbar referral">Lumbar referral</option>
+        <option value="Plantaris pathology">Plantaris pathology</option>
+        <option value="High-energy mechanism injury">High-energy mechanism injury</option>
         <option value="Unclear - Safety Net and Review">Unclear - Safety Net and Review</option>
       </select>
     </div>
     <div class="btn-group">
       <button class="btn btn-primary" onclick="setDifferential()">Continue</button>
       <button class="btn btn-outline" onclick="goTo('step-functional')">Back</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- STEP 4b – Safety Net & Review (NEW PATHWAY) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="step-safetynet" class="card card-amber step hidden">
+    <h2>Safety Net &amp; Review Pathway</h2>
+    <div class="alert alert-blue">No immediate red flags identified.</div>
+    <p>Presentation remains unclear and does not currently warrant urgent escalation.</p>
+
+    <h3>Recommended Actions</h3>
+    <ul>
+      <li>Provide symptom-guided management.</li>
+      <li>Modify aggravating activities where appropriate.</li>
+      <li>Consider conservative treatment based on clinical findings.</li>
+      <li>Arrange reassessment within 1&ndash;2 weeks.</li>
+      <li>Escalate if symptoms deteriorate or fail to progress as expected.</li>
+    </ul>
+
+    <h3>Safety Net Advice</h3>
+    <ul>
+      <li>Review if increasing weakness develops.</li>
+      <li>Review if function deteriorates.</li>
+      <li>Review if new swelling develops.</li>
+      <li>Review if systemic symptoms emerge.</li>
+      <li>Consider imaging or specialist opinion if diagnostic uncertainty persists.</li>
+    </ul>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="goTo('step-summary')">Generate Clinical Summary</button>
+      <button class="btn btn-outline" onclick="goTo('step-audit')">Complete Audit Data</button>
+      <button class="btn btn-danger" onclick="restart()">End Assessment</button>
     </div>
   </div>
 
@@ -393,46 +444,48 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
       <li>Load modification &mdash; reduce provocative activities but <strong>avoid complete rest</strong></li>
     </ul>
 
-<h3>Phase 2: Strength (Weeks 4–12)</h3>
-<ul>
-  <li>Heel raises: progress from double-leg → single-leg</li>
-  <li>3–4 sets of 8–12 reps</li>
-  <li>Slow tempo: 3 seconds up, 3 seconds down</li>
-</ul>
+    <h3>Phase 2: Strength (Weeks 4&ndash;12)</h3>
+    <ul>
+      <li>Heel raises: progress from double-leg &rarr; single-leg</li>
+      <li>3&ndash;4 sets of 8&ndash;12 reps</li>
+      <li>Slow tempo: 3 seconds up, 3 seconds down</li>
+    </ul>
 
-<h3>Exercise Quality (CRITICAL FOR PROGRESSION)</h3>
-<ul>
-  <li><strong>Perform heel raises through FULL range of motion</strong></li>
-  <li>Achieve <strong>maximum heel height</strong> at the top of each repetition</li>
-  <li><strong>Pause 1–2 seconds at the top</strong> to target outer range strength</li>
-  <li>Maintain <strong>controlled eccentric lowering</strong></li>
-</ul>
+    <h3>Exercise Quality (CRITICAL FOR PROGRESSION)</h3>
+    <ul>
+      <li><strong>Perform heel raises through FULL range of motion</strong></li>
+      <li>Achieve <strong>maximum heel height</strong> at the top of each repetition</li>
+      <li><strong>Pause 1&ndash;2 seconds at the top</strong> to target outer range strength</li>
+      <li>Maintain <strong>controlled eccentric lowering</strong></li>
+    </ul>
 
-<h3>Common Errors to Avoid</h3>
-<ul>
-  <li>Partial repetitions (not reaching full heel height)</li>
-  <li>Using momentum or bouncing</li>
-  <li>Avoiding painful range completely</li>
-  <li>Uneven loading between limbs</li>
-</ul>
+    <h3>Common Errors to Avoid</h3>
+    <ul>
+      <li>Partial repetitions (not reaching full heel height)</li>
+      <li>Using momentum or bouncing</li>
+      <li>Avoiding painful range completely</li>
+      <li>Uneven loading between limbs</li>
+    </ul>
 
-<h3>Clinical Progression Check</h3>
-<ul>
-  <li>Compare heel height between affected and unaffected side</li>
-  <li>Ensure controlled hold at top range</li>
-  <li>Progress to single-leg only when full range strength is achieved</li>
-</ul>
+    <h3>Clinical Progression Check</h3>
+    <ul>
+      <li>Compare heel height between affected and unaffected side</li>
+      <li>Ensure controlled hold at top range</li>
+      <li>Progress to single-leg only when full range strength is achieved</li>
+    </ul>
 
     <h3>Phase 3: Return to Sport (Week 12+)</h3>
     <ul>
       <li>Plyometrics: hopping, skipping, bounding</li>
       <li>Sport-specific drills with graduated loading</li>
     </ul>
-<h3>Adjunctive Treatments</h3>
-<ul>
-  <li>Manual therapy may be considered as an adjunct to support symptom management where clinically appropriate.</li>
-  <li>Manual therapy should not replace progressive loading strategies, which remain the cornerstone of Achilles tendinopathy management.</li>
-</ul>
+
+    <h3>Adjunctive Treatments</h3>
+    <ul>
+      <li>Manual therapy may be considered as an adjunct to support symptom management where clinically appropriate.</li>
+      <li>Manual therapy should not replace progressive loading strategies, which remain the cornerstone of Achilles tendinopathy management.</li>
+    </ul>
+
     <h3>Key Advice</h3>
     <ul>
       <li>Avoid complete rest &mdash; tendons respond to progressive load</li>
@@ -540,28 +593,24 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
     </div>
   </div>
 
-
 </div><!-- /container -->
 
 <!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
 <footer>
- <p>
-Disclaimer: This tool is intended solely as a clinical decision support aid to assist healthcare professionals in the structured assessment of Achilles-related presentations. It does not provide a diagnosis, does not replace clinical judgement, and must not be used as the sole basis for referral, investigation, treatment, or discharge decisions.
-</p>
-
-<p style="margin-top:8px">
-All clinical decisions remain the responsibility of the treating healthcare professional, who must interpret the information generated by this tool alongside the patient's history, examination findings, presentation, and local clinical pathways.
-</p>
-
-<p style="margin-top:8px">
-The tool provides evidence-informed guidance based on recognised clinical principles and NICE-aligned practice but cannot account for all individual patient factors or clinical scenarios. Use of this tool does not transfer clinical responsibility from the treating clinician.
-</p>
-
-<p style="margin-top:8px">
-The author(s), developer(s), and organisation providing this tool accept no responsibility for clinical decisions made solely on the basis of information generated by the tool. Responsibility for patient assessment, diagnosis, referral, management, and ongoing care remains entirely with the treating clinician.
-</p>
+  <p>
+    Disclaimer: This tool is intended solely as a clinical decision support aid to assist healthcare professionals in the structured assessment of Achilles-related presentations. It does not provide a diagnosis, does not replace clinical judgement, and must not be used as the sole basis for referral, investigation, treatment, or discharge decisions.
+  </p>
+  <p style="margin-top:8px">
+    All clinical decisions remain the responsibility of the treating healthcare professional, who must interpret the information generated by this tool alongside the patient's history, examination findings, presentation, and local clinical pathways.
+  </p>
+  <p style="margin-top:8px">
+    The tool provides evidence-informed guidance based on recognised clinical principles and NICE-aligned practice but cannot account for all individual patient factors or clinical scenarios. Use of this tool does not transfer clinical responsibility from the treating clinician.
+  </p>
+  <p style="margin-top:8px">
+    The author(s), developer(s), and organisation providing this tool accept no responsibility for clinical decisions made solely on the basis of information generated by the tool. Responsibility for patient assessment, diagnosis, referral, management, and ongoing care remains entirely with the treating clinician.
+  </p>
   <p style="margin-top:6px">&copy; Achilles Tendon Assessment Tool</p>
 </footer>
 
@@ -588,23 +637,24 @@ const stepOrder = [
   'step-duration','step-tendinopathy','step-summary','step-audit'
 ];
 
-/* Red-flag labels for display */
+/* Red-flag labels for display
+   FIX: Removed stale 'trauma' key (no corresponding checkbox existed).
+        Updated 'plantarflex' label to match revised HTML wording. */
 const rfLabels = {
-  pop: 'Sudden "pop" or snapping sensation',
-  plantarflex: 'Inability to plantarflex or push off',
-  thompson: 'Positive Thompson test',
-  gap: 'Palpable tendon gap',
-  swelling: 'Severe swelling or bruising',
-  weightbear: 'Inability to weight bear',
-  systemic: 'Systemic symptoms (fever, redness, heat)',
-  fluoroquinolone: 'History of fluoroquinolone antibiotic use',
+  pop:            'Sudden "pop" or snapping sensation',
+  plantarflex:    'Marked loss of plantarflexion strength or inability to push off (not explained by pain alone)',
+  thompson:       'Positive Thompson (Simmonds\') test',
+  gap:            'Palpable tendon gap',
+  swelling:       'Severe swelling or bruising',
+  weightbear:     'Inability to weight bear',
+  systemic:       'Systemic symptoms (fever, redness, heat)',
+  fluoroquinolone:'History of fluoroquinolone antibiotic use',
   corticosteroid: 'History of corticosteroid use (oral or local injection)',
-  nightpain: 'Night pain or rest pain unrelated to loading',
-  inflammatory: 'History of inflammatory or rheumatological condition',
-  bilateral: 'Bilateral Achilles tendon symptoms',
-  weightloss: 'Unexplained weight loss',
-  dvt: 'Symptoms suggestive of DVT',
-  trauma: 'Significant trauma or high-energy mechanism of injury'
+  nightpain:      'Night pain or rest pain unrelated to loading',
+  inflammatory:   'History of inflammatory or rheumatological condition',
+  bilateral:      'Bilateral Achilles tendon symptoms',
+  weightloss:     'Unexplained weight loss',
+  dvt:            'Symptoms suggestive of DVT (unilateral calf swelling, warmth, tenderness)'
 };
 
 /* ══════════════════════════════════════════════
@@ -627,9 +677,7 @@ function goTo(id) {
 
 function updateProgress() {
   const bar = document.getElementById('progressBar');
-  const idx = stepOrder.indexOf(currentStep);
   bar.innerHTML = '';
-  // Simplified: show 7 dots for main flow
   const mainSteps = ['step-start','step-demographics','step-onset','step-redflags','step-functional','step-tendinopathy','step-summary','step-audit'];
   mainSteps.forEach((s, i) => {
     const dot = document.createElement('div');
@@ -669,7 +717,7 @@ function evaluateRedFlags() {
   if (state.hasRedFlags) {
     // Populate urgent page
     const ul = document.getElementById('urgentFlagList');
-    ul.innerHTML = state.redFlags.map(f => '<li>' + f + '</li>').join('');
+    ul.innerHTML = state.redFlags.map(f => '<li>' + esc(f) + '</li>').join('');
 
     // Determine if rupture-specific flags dominate
     const ruptureFlags = ['pop','plantarflex','thompson','gap'];
@@ -714,12 +762,22 @@ function setDifferential() {
   if (!sel) { showToast('Please select a diagnosis'); return; }
   state.differential = sel;
   state.diagnosis = sel;
-  state.outcomeClass = 'Differential Diagnosis';
-  goTo('step-summary');
+  // CHANGE 4: "Unclear" routes to the dedicated Safety Net & Review pathway.
+  if (sel === 'Unclear - Safety Net and Review') {
+    state.outcomeClass = 'Safety Net';
+    goTo('step-safetynet');
+  } else {
+    state.outcomeClass = 'Differential Diagnosis';
+    goTo('step-summary');
+  }
 }
 
 /* ══════════════════════════════════════════════
    CLINICAL SUMMARY
+   FIX: Corrected unmatched braces — the separator lines and footer lines
+        (Generated date, Tool name) were trapped inside the Differential
+        else-if block and never appeared for other outcome types.
+        Now all outcomes correctly append the footer separator lines.
    ══════════════════════════════════════════════ */
 function buildSummary() {
   const lines = [];
@@ -737,7 +795,7 @@ function buildSummary() {
   else symptoms.push('Insidious onset Achilles region symptoms');
   if (state.loadPain === true) symptoms.push('Pain aggravated by loading activities');
   if (state.loadPain === false) symptoms.push('Pain not typical of load-related tendinopathy');
-  if (state.duration) symptoms.push('Duration: ' + (state.duration === 'acute' ? '<3 months' : '≥3 months'));
+  if (state.duration) symptoms.push('Duration: ' + (state.duration === 'acute' ? '<3 months' : '>=3 months'));
   lines.push('Symptoms: ' + symptoms.join('; '));
   lines.push('');
 
@@ -775,50 +833,72 @@ function buildSummary() {
     lines.push('  - Non-weight-bearing with crutches');
     lines.push('Exercise prescription: None - await specialist review');
     lines.push('Referral: URGENT - same-day orthopaedic / A&E referral');
+
   } else if (state.outcomeClass === 'Red Flag Referral') {
     lines.push('Management:');
     lines.push('  - Urgent referral for specialist assessment');
     lines.push('  - Investigate systemic symptoms');
     lines.push('Exercise prescription: None pending investigation');
     lines.push('Referral: URGENT - same-day referral');
+
   } else if (state.outcomeClass === 'Tendinopathy') {
     lines.push('Management:');
     lines.push('  - Progressive tendon loading programme');
     lines.push('  - Avoid complete rest');
     lines.push('  - Avoid corticosteroid injections');
     if (state.duration === 'chronic') {
-      lines.push('  - Consider imaging (symptoms ≥3 months)');
+      lines.push('  - Consider imaging (symptoms >=3 months)');
     } else {
       lines.push('  - Imaging only if no improvement after 3 months');
     }
+    lines.push('  - Manual therapy may be considered as an adjunct where clinically appropriate');
+    lines.push('  - Manual therapy should not replace progressive loading strategies');
     lines.push('Exercise prescription:');
     lines.push('  Phase 1 (Wk 0-4): Isometric calf holds 30-45s x 4-5 reps, 2-3x/day');
-    lines.push('  Phase 2 (Wk 4-12): Heel raises double→single leg, 3-4 sets x 8-12 reps, slow tempo');
-    lines.push('    • Full range of motion with maximum heel height');
-    lines.push('    • 1–2 second pause at top (outer range strengthening)');
-    lines.push('    • Controlled eccentric lowering');
+    lines.push('  Phase 2 (Wk 4-12): Heel raises double->single leg, 3-4 sets x 8-12 reps, slow tempo');
+    lines.push('    - Full range of motion with maximum heel height');
+    lines.push('    - 1-2 second pause at top (outer range strengthening)');
+    lines.push('    - Controlled eccentric lowering');
     lines.push('  Phase 3 (Wk 12+): Plyometrics - hopping, skipping, sport-specific drills');
     lines.push('Referral: Not indicated at this stage');
-  } else if (state.outcomeClass === 'Differential Diagnosis') {
- lines.push('Management:');
+    lines.push('Clinical note: Clinical judgement required — consider individual patient factors');
 
-if(state.diagnosis === 'Unclear - Safety Net and Review'){
-  lines.push('  - Presentation does not currently warrant urgent escalation');
-  lines.push('  - Consider modified treatment and close monitoring');
-  lines.push('  - Reassess within 1-2 weeks');
-  lines.push('  - Escalate if symptoms fail to progress as expected');
-  lines.push('Exercise prescription: Symptom-guided management');
-  lines.push('Referral: Not currently indicated but review if deterioration occurs');
-}else{
-  lines.push('  - Further investigation for: ' + state.diagnosis);
-  lines.push('  - Consider appropriate imaging or specialist referral');
-  lines.push('Exercise prescription: Dependent on confirmed diagnosis');
-  lines.push('Referral: As clinically indicated');
-}
+  } else if (state.outcomeClass === 'Safety Net') {
+    lines.push('Management:');
+    lines.push('  - No immediate red flags identified');
+    lines.push('  - Presentation remains diagnostically uncertain');
+    lines.push('  - Symptom-guided management advised');
+    lines.push('  - Reassessment recommended within 1-2 weeks');
+    lines.push('  - Escalate if symptoms worsen or fail to improve');
+    lines.push('Exercise prescription: Based on clinical findings and symptom response');
+    lines.push('Referral: Not currently indicated');
+
+  } else if (state.outcomeClass === 'Differential Diagnosis') {
+    lines.push('Management:');
+
+    if (state.diagnosis === 'Unclear - Safety Net and Review') {
+      lines.push('  - Presentation does not currently warrant urgent escalation');
+      lines.push('  - Consider modified treatment and close monitoring');
+      lines.push('  - Reassess within 1-2 weeks');
+      lines.push('  - Escalate if symptoms fail to progress as expected');
+      lines.push('Exercise prescription: Symptom-guided management');
+      lines.push('Referral: Not currently indicated — review if deterioration occurs');
+    } else {
+      lines.push('  - Suspected: ' + state.diagnosis);
+      lines.push('  - Consider appropriate imaging or specialist referral');
+      lines.push('  - Clinical judgement required regarding investigation and management pathway');
+      lines.push('Exercise prescription: Dependent on confirmed diagnosis');
+      lines.push('Referral: As clinically indicated');
+    }
+  }
+
+  // Footer — FIX: these lines now appear for ALL outcome types (previously trapped inside Differential block)
   lines.push('');
-  lines.push('──────────');
+  lines.push('──────────────────────────────────────');
   lines.push('Generated: ' + new Date().toLocaleString('en-GB'));
   lines.push('Tool: Achilles Tendon Clinical Assessment Tool');
+  lines.push('IMPORTANT: This summary is a clinical decision support aid only.');
+  lines.push('It does not constitute a diagnosis. Clinical judgement required.');
 
   const text = lines.join('\n');
   document.getElementById('summaryBox').textContent = text;
@@ -832,7 +912,7 @@ function copySummary() {
   navigator.clipboard.writeText(getSummaryText()).then(() => {
     showToast('Summary copied to clipboard');
   }).catch(() => {
-    // Fallback
+    // Fallback for browsers without clipboard API
     const ta = document.createElement('textarea');
     ta.value = getSummaryText();
     document.body.appendChild(ta);
