@@ -217,10 +217,12 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
         <div class="rf-explain">Suggests possible acute Achilles tendon rupture. Often reported during pushing off or sudden acceleration.</div>
       </div>
 
-      <div class="rf-item">
-        <label><input type="checkbox" data-rf="plantarflex"> <strong>Inability to plantarflex or push off</strong></label>
-        <div class="rf-explain">Indicates functional loss of the Achilles tendon. The patient cannot rise onto tiptoes on the affected side.</div>
-      </div>
+     <div class="rf-item">
+  <label><input type="checkbox" data-rf="plantarflex"> <strong>Marked loss of plantarflexion strength or inability to push off (not explained by pain alone)</strong></label>
+  <div class="rf-explain">
+    Consider positive only where there is significant functional loss suggestive of tendon disruption. Pain during plantarflexion alone is NOT a red flag. Compare function with the unaffected side and assess ability to generate plantarflexion movement and perform a heel raise.
+  </div>
+</div>
 
       <div class="rf-item">
         <label><input type="checkbox" data-rf="thompson"> <strong>Positive Thompson (Simmonds') test</strong></label>
@@ -282,12 +284,6 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
         <div class="rf-explain">Calf swelling and pain may mimic Achilles pathology but could indicate deep vein thrombosis. Consider Wells score assessment and urgent investigation if DVT is suspected.</div>
       </div>
 
-      <div class="rf-item">
-        <label><input type="checkbox" data-rf="trauma"> <strong>Significant trauma or high-energy mechanism of injury</strong></label>
-        <div class="rf-explain">A high-energy mechanism (e.g. fall from height, direct blow, road traffic accident) raises suspicion for fracture, complete or partial rupture, or other significant structural injury requiring urgent imaging and specialist assessment.</div>
-      </div>
-
-    </div>
 
     <div class="btn-group">
       <button class="btn btn-primary" onclick="evaluateRedFlags()">Continue</button>
@@ -351,10 +347,18 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
       <thead><tr><th>Condition</th><th>Key Feature</th></tr></thead>
       <tbody>
         <tr><td>Retrocalcaneal bursitis</td><td>Pain anterior to the Achilles tendon insertion</td></tr>
-        <tr><td>Sural nerve irritation</td><td>Burning / tingling along the lateral ankle</td></tr>
+        <tr>
+  <td>Sural nerve irritation</td>
+  <td>
+    Burning or tingling along the lateral ankle. Consider neural mobility exercises,
+    load modification, footwear review and symptom monitoring before imaging or specialist referral.
+  </td>
+</tr>
         <tr><td>Partial Achilles tear</td><td>Weakness but not complete loss of function</td></tr>
         <tr><td>Posterior ankle impingement</td><td>Pain at end-range plantarflexion</td></tr>
         <tr><td>Lumbar referral</td><td>Referred pain to the posterior leg (L5/S1 distribution)</td></tr>
+        <tr><td>Plantaris pathology</td><td>Medial Achilles pain, often in runners, may mimic Achilles tendinopathy</td></tr>
+        <tr><td>High-energy mechanism injury</td><td>Requires further clinical assessment to exclude fracture or significant structural injury</td></tr>
       </tbody>
     </table>
     <p style="margin-top:10px">Select the most likely working diagnosis, or choose "Unclear" to record further investigation is needed.</p>
@@ -366,7 +370,7 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
         <option value="Partial Achilles tear">Partial Achilles tear</option>
         <option value="Posterior ankle impingement">Posterior ankle impingement</option>
         <option value="Lumbar referral">Lumbar referral</option>
-        <option value="Unclear - further investigation needed">Unclear - further investigation needed</option>
+        <option value="Unclear - Safety Net and Review">Unclear - Safety Net and Review</option>
       </select>
     </div>
     <div class="btn-group">
@@ -424,7 +428,11 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
       <li>Plyometrics: hopping, skipping, bounding</li>
       <li>Sport-specific drills with graduated loading</li>
     </ul>
-
+<h3>Adjunctive Treatments</h3>
+<ul>
+  <li>Manual therapy may be considered as an adjunct to support symptom management where clinically appropriate.</li>
+  <li>Manual therapy should not replace progressive loading strategies, which remain the cornerstone of Achilles tendinopathy management.</li>
+</ul>
     <h3>Key Advice</h3>
     <ul>
       <li>Avoid complete rest &mdash; tendons respond to progressive load</li>
@@ -539,7 +547,21 @@ footer{text-align:center;padding:28px 16px;font-size:.82rem;color:var(--gray-500
 <div class="toast" id="toast"></div>
 
 <footer>
-  <p>Disclaimer: This tool is designed as a clinical decision support aid and does not replace professional judgement or comprehensive patient assessment. All clinical decisions remain the responsibility of the treating healthcare professional. Guidance is informed by NICE MSK and tendon management principles; however, clinicians must adhere to local organisational policies, governance frameworks, and escalation pathways where indicated.</p>
+ <p>
+Disclaimer: This tool is intended solely as a clinical decision support aid to assist healthcare professionals in the structured assessment of Achilles-related presentations. It does not provide a diagnosis, does not replace clinical judgement, and must not be used as the sole basis for referral, investigation, treatment, or discharge decisions.
+</p>
+
+<p style="margin-top:8px">
+All clinical decisions remain the responsibility of the treating healthcare professional, who must interpret the information generated by this tool alongside the patient's history, examination findings, presentation, and local clinical pathways.
+</p>
+
+<p style="margin-top:8px">
+The tool provides evidence-informed guidance based on recognised clinical principles and NICE-aligned practice but cannot account for all individual patient factors or clinical scenarios. Use of this tool does not transfer clinical responsibility from the treating clinician.
+</p>
+
+<p style="margin-top:8px">
+The author(s), developer(s), and organisation providing this tool accept no responsibility for clinical decisions made solely on the basis of information generated by the tool. Responsibility for patient assessment, diagnosis, referral, management, and ongoing care remains entirely with the treating clinician.
+</p>
   <p style="margin-top:6px">&copy; Achilles Tendon Assessment Tool</p>
 </footer>
 
@@ -778,13 +800,21 @@ function buildSummary() {
     lines.push('  Phase 3 (Wk 12+): Plyometrics - hopping, skipping, sport-specific drills');
     lines.push('Referral: Not indicated at this stage');
   } else if (state.outcomeClass === 'Differential Diagnosis') {
-    lines.push('Management:');
-    lines.push('  - Further investigation for: ' + state.diagnosis);
-    lines.push('  - Consider appropriate imaging or specialist referral');
-    lines.push('Exercise prescription: Dependent on confirmed diagnosis');
-    lines.push('Referral: As clinically indicated');
-  }
+ lines.push('Management:');
 
+if(state.diagnosis === 'Unclear - Safety Net and Review'){
+  lines.push('  - Presentation does not currently warrant urgent escalation');
+  lines.push('  - Consider modified treatment and close monitoring');
+  lines.push('  - Reassess within 1-2 weeks');
+  lines.push('  - Escalate if symptoms fail to progress as expected');
+  lines.push('Exercise prescription: Symptom-guided management');
+  lines.push('Referral: Not currently indicated but review if deterioration occurs');
+}else{
+  lines.push('  - Further investigation for: ' + state.diagnosis);
+  lines.push('  - Consider appropriate imaging or specialist referral');
+  lines.push('Exercise prescription: Dependent on confirmed diagnosis');
+  lines.push('Referral: As clinically indicated');
+}
   lines.push('');
   lines.push('──────────');
   lines.push('Generated: ' + new Date().toLocaleString('en-GB'));
